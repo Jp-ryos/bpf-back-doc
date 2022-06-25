@@ -317,3 +317,27 @@ Bar3=826
 TermPos1=R
 TermPos2=R
 ZOrder=15
+
+[Entity]
+PName=t_reply
+LName=回答
+Comment=
+TableOption=
+Page=Main
+Left=700
+Top=2200
+Field="競技Id","competition_id","uuid","NOT NULL",0,"","",$FFFFFFFF,""
+Field="判定Id","judge_id","varchar(20)","NOT NULL",,"","",$FFFFFFFF,""
+Field="回答者ユーザコード","reply_user_code","char(6)","NOT NULL",,"","",$FFFFFFFF,""
+Field="回答言語","reply_lang","varchar(10)","NOT NULL",,"","",$FFFFFFFF,""
+Field="送信日時","submit_date_time","@DATETIME","NOT NULL",,"","",$FFFFFFFF,""
+Field="回答日時","relpy_date_time","@DATETIME","NOT NULL",,"","",$FFFFFFFF,""
+Field="回答ステータス","reply_status","char(1)","NOT NULL",,"","",$FFFFFFFF,""
+Field="回答メッセージ","reply_message","varchar(100)","NOT NULL",,"","",$FFFFFFFF,""
+EffectMode=None
+Tag=competition-management
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20220625215706
+Position="Main",700,2200
+ZOrder=16
