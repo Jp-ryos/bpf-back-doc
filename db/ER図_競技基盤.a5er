@@ -1,0 +1,319 @@
+﻿# A5:ER FORMAT:16
+# A5:ER ENCODING:UTF8
+# A5:ER Mk-1 Copyright © 2007 m.matsubara
+# A5:SQL Mk-2 Version 2.17.2 Copyright © 1997 - 2022 m.matsubara
+#  https://a5m2.mmatsubara.com
+
+[Manager]
+ProjectName=ER図_競技基盤
+Author=Ryo Shibata
+MaxEntityRowShow=1000
+ReadOnlyRecommend=0
+Page=Main
+PageInfo="Main",5,"A3Landscape",$FFFFFF
+LogicalView=1
+DecodeDomain=0
+ViewModePageIndividually=1
+ViewMode=5
+ViewFormat=0
+UseNondependenceDashLine=0
+FontName=メイリオ
+FontSize=6
+PaperSize=A4Landscape
+HeaderLeft=
+HeaderCenter=
+HeaderRight=
+FooterLeft=
+FooterCenter=
+FooterRight=
+ShowPageoutRelation=1
+RDBMSType=6
+RDBMSTypeName=PostgreSQL
+CommonField="作成ユーザコード","create_user_code","@CHAR(6)","NOT NULL",,"","作成者のユーザコード",$FFFFFFFF
+CommonField="作成日時","create_date_time","@DATETIME","NOT NULL",,"","作成日時",$FFFFFFFF
+CommonField="作成プログラム","create_program","@VARCHAR(15)","NOT NULL",,"","作成プログラム",$FFFFFFFF
+CommonField="更新ユーザコード","update_user_code","@CHAR(6)","NOT NULL",,"","更新者のユーザコード",$FFFFFFFF
+CommonField="更新日時","update_date_time","@DATETIME","NOT NULL",,"","更新日時",$FFFFFFFF
+CommonField="更新プログラム","update_program","@VARCHAR(15)","NOT NULL",,"","更新プログラム",$FFFFFFFF
+CommonField="更新回数","update_count","@INT","NOT NULL",,"0","更新回数",$FFFFFFFF
+CommonField="削除フラグ","delete_flag","@CHAR(1)","NOT NULL",,"\q0\q","削除フラグ",$FFFFFFFF
+DefaultPkName=%0:s_PKC
+DefaultPkIndexName=%0:s_PKI
+DefaultIndexName=%0:s_IX%1:d
+DefaultFkName=%0:s_FK%1:d
+SqlSeparator=0
+UpperCaseKeyword=0
+ShowTag=1
+ShowCommonAttributes=1
+BugFixEntityWidth=1
+
+[Entity]
+PName=t_competition
+LName=競技
+Comment=競技
+TableOption=
+Page=MAIN
+Left=750
+Top=750
+Field="競技Id","competition_id","uuid","NOT NULL",0,"","競技を一意に識別するID",$FFFFFFFF,""
+Field="競技タグ","competition_tag","varchar(20)",,,"","競技に付与できるタグ\n(検索時使用想定のため付与を推奨)",$FFFFFFFF,"UNIQUE"
+Field="競技ステータス","competition_status","char(2)","NOT NULL",,"","競技ステータス\n00: 入力／起票処理中\n01: 募集期間\n02: 競技開始前\n03: 競技中\n04: 終了済み。フィードバック受け入れ中\n05: 終了済み。アーカイブ化",$FFFFFFFF,""
+Field="競技種別","competition_type","char(1)","NOT NULL",,"","どのような使用を想定して起票されたか\n1:プロコン本番用\n2:勉強会用\n3:個人用\n4:チーム用\n5:開発チームテスト用\n6:プロコン運営テスト用\n7:プロモーション",$FFFFFFFF,""
+Field="競技募集区分","competition_recruit_type","char(1)","NOT NULL",,"\q3\q","募集単位を設定する\n1:チーム単位\n2:個人単位\n3:混合",$FFFFFFFF,""
+Field="予定出題数","schedule_number_of_problems","integer","NOT NULL",,"","予定出題数",$FFFFFFFF,""
+Field="出題数","number_of_problems","integer",,,"","出題数。予定から変更になった場合に格納される",$FFFFFFFF,""
+Field="フィードバックURL","feedback_url","varchar(200)",,,"","formsなどのURLを格納する",$FFFFFFFF,""
+Field="リマインドフラグ","remind_flag","char(1)",,,"","参加者に対して通知を送信するか",$FFFFFFFF,""
+EffectMode=None
+Tag=competition-management
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20220612182317
+Position="MAIN",750,750
+ZOrder=2
+
+[Comment]
+Comment=競技基盤
+FontName=Tahoma
+FontBold=0
+FontItalic=0
+FontUnderline=0
+FontSize=9
+FontColor=$000000
+LineColor=$000000
+BkColor=$99FFFF
+Page=Main
+Left=564
+Top=534
+ZOrder=5
+Width=315
+Height=101
+
+[Entity]
+PName=t_competition_operation_user
+LName=競技運営担当者
+Comment=競技運営担当者
+TableOption=
+Page=MAIN
+Left=550
+Top=1700
+Field="競技Id","competition_id","uuid","NOT NULL",0,"","競技を一意に識別するID",$FFFFFFFF,""
+Field="ユーザコード","user_code","bigint","NOT NULL",1,"","ユーザコード",$FFFFFFFF,""
+Field="担当者区分","operation_user_type","char(1)","NOT NULL",2,"","担当者の役割を定義する\n1:主催\n2:運営リーダー\n3:運営メンバー(全般)\n4:運営メンバー(ルール担当)\n5:運営メンバー(問題選定担当)\n6:運営メンバー(フロント・API担当)\n9:補助メンバー",$FFFFFFFF,""
+Field="メールアドレス","email_address","varchar(256)","NOT NULL",,"","メールアドレス",$FFFFFFFF,""
+EffectMode=None
+Tag=competition-management
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20220613222719
+Position="MAIN",550,1700,754,315
+ZOrder=6
+
+[Relation]
+Entity1=t_competition
+Entity2=t_competition_operation_user
+RelationType1=2
+RelationType2=4
+Fields1=competition_id
+Fields2=competition_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,2650,5120,5774,R,R,""
+Dependence=1
+Caption=
+PName=
+ModifiedDateTime=20220612172511
+LineMode=0
+Bar1=265
+Bar2=512
+Bar3=577
+TermPos1=R
+TermPos2=R
+ZOrder=7
+
+[Entity]
+PName=t_competition_join_user
+LName=競技参加ユーザ
+Comment=
+TableOption=
+Page=MAIN
+Left=2050
+Top=700
+Field="競技Id","competition_id","uuid","NOT NULL",0,"","競技を一意に識別するID",$FFFFFFFF,""
+Field="チームコード","team_code","bigint",,,"","チームコード",$FFFFFFFF,""
+Field="ユーザコード","user_code","bigint","NOT NULL",,"","ユーザコード",$FFFFFFFF,""
+Field="メールアドレス","email_address","varchar(256)","NOT NULL",,"","メールアドレス",$FFFFFFFF,""
+Field="申請ユーザコード","request_user_code","bigint","NOT NULL",,"","申請したユーザのユーザコード",$FFFFFFFF,""
+Field="申請日時","request_date_time","@DATETIME","NOT NULL",,"","申請した日時",$FFFFFFFF,""
+Field="承認ユーザコード","approve_user_code","bigint",,,"","承認したユーザのユーザコード",$FFFFFFFF,""
+Field="承認日時","approve_date_time","@DATETIME",,,"","承認した日時",$FFFFFFFF,""
+Field="非承認理由種別","not_approve_reason_code","char(1)",,,"","非承認理由\n1:誤った申請\n2:不正なユーザからの申請",$FFFFFFFF,""
+Field="削除ユーザコード","delete_user_code","bigint",,,"","削除したユーザのユーザコード",$FFFFFFFF,""
+Field="削除日時","delete_date_time","@DATETIME",,,"","削除した日時",$FFFFFFFF,""
+Field="削除理由種別","delete_reason_type","char(1)",,,"","削除理由\n1:誤った申請\n2:退社等に伴う削除\n3:不正なユーザからの申請",$FFFFFFFF,""
+EffectMode=None
+Tag=competition-management
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20220612181320
+Position="MAIN",2050,700
+ZOrder=8
+
+[Relation]
+Entity1=t_competition
+Entity2=t_competition_join_user
+RelationType1=2
+RelationType2=3
+Fields1=competition_id
+Fields2=competition_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,4309,5691,3926,R,R,""
+Dependence=1
+Caption=
+PName=
+ModifiedDateTime=20220612181337
+LineMode=0
+Bar1=431
+Bar2=569
+Bar3=393
+TermPos1=R
+TermPos2=R
+ZOrder=9
+
+[Entity]
+PName=t_competition_country
+LName=競技国
+Comment=
+TableOption=
+Page=MAIN
+Left=2050
+Top=1300
+Field="競技Id","conpetition_id","","NOT NULL",0,"","",$FFFFFFFF,""
+Field="言語コード","lang_code","","NOT NULL",1,"","",$FFFFFFFF,""
+Field="競技タイトル","competition_title","varchar(30)","NOT NULL",,"","競技タイトル",$FFFFFFFF,""
+Field="競技コメント","competition_comment","text",,,"","競技コメント(HTMLを含めても良い)",$FFFFFFFF,""
+Field="競技参加募集開始予定日時","competition_scheduled_recruit_start_date_time","@DATETIME","NOT NULL",,"","募集開始予定日時。\n競技ステータスが00の時に用いられる想定",$FFFFFFFF,""
+Field="競技参加募集終了予定日時","competition_scheduled_recruit_end_date_time","@DATETIME","NOT NULL",,"","募集終了予定日時。\n競技ステータスが00の時に用いられる想定",$FFFFFFFF,""
+Field="競技開始予定日時","competition_scheduled_start_date_time","@DATETIME","NOT NULL",,"","競技開始予定日時。\n競技ステータスが00, 01の時に用いられる想定。",$FFFFFFFF,""
+Field="競技終了予定日時","competition_scheduled_end_date_time","@DATETIME","NOT NULL",,"","競技終了予定日時。競技ステータスが00, 01の時に用いられる想定",$FFFFFFFF,""
+Field="競技参加募集開始日時","competition_recruit_start_date_time","@DATETIME",,,"","競技参加募集開始日時。予定から変更になった場合に格納される",$FFFFFFFF,""
+Field="競技参加募集終了日時","competition_recruit_end_date_time","@DATETIME",,,"","競技参加募集終了日時。予定から変更になった場合に格納される",$FFFFFFFF,""
+Field="競技開始日時","competition_start_date_time","@DATETIME",,,"","競技開始日時。予定から変更になった場合に格納される",$FFFFFFFF,""
+Field="競技終了日時","competition_end_date_time","@DATETIME",,,"","競技終了日時。予定から変更になった場合に格納される",$FFFFFFFF,""
+EffectMode=None
+Tag=competition-manegement
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20220612182323
+Position="MAIN",2050,1300,741,558
+ZOrder=10
+
+[Relation]
+Entity1=t_competition
+Entity2=t_competition_country
+RelationType1=2
+RelationType2=4
+Fields1=competition_id
+Fields2=conpetition_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,5919,4226,2355,R,R,""
+Dependence=0
+Caption=
+PName=
+ModifiedDateTime=20220612181858
+LineMode=0
+Bar1=592
+Bar2=423
+Bar3=236
+TermPos1=R
+TermPos2=R
+ZOrder=11
+
+[Entity]
+PName=t_competition_problem
+LName=競技問題
+Comment=
+TableOption=
+Page=MAIN
+Left=1700
+Top=2000
+Field="競技Id","competition_id","uuid","NOT NULL",0,"","競技を一意に識別するID",$FFFFFFFF,""
+Field="問題コード","problem_code","varchar(10)","NOT NULL",1,"","問題を一意に識別するID",$FFFFFFFF,""
+Field="言語コード","lang_code","char(2)","NOT NULL",2,"","",$FFFFFFFF,""
+Field="問題タグ","problem_tag","varchar(20)","NOT NULL",,"","問題用のタグ",$FFFFFFFF,"UNIQUE"
+Field="選出区分","problem_chose_type","char(1)","NOT NULL",,"","問題を選考する際の検討段階を保持する\n1:検討中\n2:出題するで確定\n3:出題しないで確定",$FFFFFFFF,""
+EffectMode=None
+Tag=competition-management
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20220613221117
+Position="MAIN",1700,2000
+ZOrder=12
+
+[Relation]
+Entity1=t_competition
+Entity2=t_competition_problem
+RelationType1=2
+RelationType2=3
+Fields1=competition_id
+Fields2=competition_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,7528,5382,3104,R,R,""
+Dependence=1
+Caption=
+PName=
+ModifiedDateTime=20220613223409
+LineMode=0
+Bar1=753
+Bar2=538
+Bar3=310
+TermPos1=R
+TermPos2=R
+ZOrder=13
+
+[Entity]
+PName=m_problem
+LName=問題マスタ
+Comment=
+TableOption=
+Page=MAIN
+Left=2500
+Top=2000
+Field="問題コード","problem_code","varchar(10)","NOT NULL",0,"","AOJ準拠の問題コード",$FFFFFFFF,""
+Field="言語コード","lang_code","char(2)","NOT NULL",1,"","言語コード",$FFFFFFFF,""
+Field="問題名","problem_name","varchar(50)","NOT NULL",,"","問題名",$FFFFFFFF,""
+Field="問題文","problem_explain","text","NOT NULL",,"","問題文",$FFFFFFFF,""
+Field="時間制限","time_limit","float",,,"","時間制限",$FFFFFFFF,""
+Field="メモリ制限","memory_limit","float",,,"","メモリ制限",$FFFFFFFF,""
+EffectMode=None
+Tag=competition-manegement
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20220613224139
+Position="MAIN",2500,2000
+ZOrder=14
+
+[Relation]
+Entity1=m_problem
+Entity2=t_competition_problem
+RelationType1=2
+RelationType2=3
+Fields1=problem_code,lang_code
+Fields2=problem_code,lang_code
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,7671,2251,8261,R,R,""
+Dependence=1
+Caption=
+PName=
+ModifiedDateTime=20220613223416
+LineMode=0
+Bar1=767
+Bar2=225
+Bar3=826
+TermPos1=R
+TermPos2=R
+ZOrder=15
