@@ -1,0 +1,285 @@
+﻿# A5:ER FORMAT:16
+# A5:ER ENCODING:UTF8
+# A5:ER Mk-1 Copyright © 2007 m.matsubara
+# A5:SQL Mk-2 Version 2.17.2 Copyright © 1997 - 2022 m.matsubara
+#  https://a5m2.mmatsubara.com
+
+[Manager]
+ProjectName=2022_procon
+Author=Ryo Shibata
+MaxEntityRowShow=1000
+ReadOnlyRecommend=0
+Page=Main
+PageInfo="Main",5,"A3Landscape",$FFFFFF
+LogicalView=1
+DecodeDomain=0
+ViewModePageIndividually=1
+ViewMode=5
+ViewFormat=0
+UseNondependenceDashLine=0
+FontName=メイリオ
+FontSize=6
+PaperSize=A4Landscape
+HeaderLeft=
+HeaderCenter=
+HeaderRight=
+FooterLeft=
+FooterCenter=
+FooterRight=
+ShowPageoutRelation=1
+RDBMSType=6
+RDBMSTypeName=PostgreSQL
+CommonField="作成ユーザコード","create_user_code","@CHAR(6)","NOT NULL",,"","作成者のユーザコード",$FFFFFFFF
+CommonField="作成日時","create_date_time","@DATETIME","NOT NULL",,"","作成日時",$FFFFFFFF
+CommonField="作成プログラム","create_program","@VARCHAR(15)","NOT NULL",,"","作成プログラム",$FFFFFFFF
+CommonField="更新ユーザコード","update_user_code","@CHAR(6)","NOT NULL",,"","更新者のユーザコード",$FFFFFFFF
+CommonField="更新日時","update_date_time","@DATETIME","NOT NULL",,"","更新日時",$FFFFFFFF
+CommonField="更新プログラム","update_program","@VARCHAR(15)","NOT NULL",,"","更新プログラム",$FFFFFFFF
+CommonField="更新回数","update_count","@INT","NOT NULL",,"0","更新回数",$FFFFFFFF
+CommonField="削除フラグ","delete_flag","@CHAR(1)","NOT NULL",,"\q0\q","削除フラグ",$FFFFFFFF
+DefaultPkName=%0:s_PKC
+DefaultPkIndexName=%0:s_PKI
+DefaultIndexName=%0:s_IX%1:d
+DefaultFkName=%0:s_FK%1:d
+SqlSeparator=0
+UpperCaseKeyword=0
+ShowTag=1
+ShowCommonAttributes=1
+BugFixEntityWidth=1
+
+[Entity]
+PName=m_user
+LName=ユーザマスタ
+Comment=ユーザ管理
+TableOption=
+Page=MAIN
+Left=1400
+Top=850
+Field="ユーザId","user_id","uuid","NOT NULL",0,"","ユーザを一意に識別するId",$FFFFFFFF,""
+Field="ユーザコード","user_code","bigserial","NOT NULL",,"","ユーザコード。\n一般ユーザは10000から採番処理を開始し、\n管理ユーザは0から採番処理を開始する。",$FFFFFFFF,"UNIQUE"
+Field="ユーザ種別","user_type","char(1)","NOT NULL",,"","ユーザの種別\n0: 未使用\n1: 管理ユーザ(閲覧)\n2: 管理ユーザ(AOJ紐づけ済)\n3: 閲覧ユーザ\n4: 競技ユーザ\n9: システム",$FFFFFFFF,""
+Field="メールアドレス","email_address","varchar(256)","NOT NULL",,"","ユーザのメールアドレス\n最大長は\QRFC 2821 SMTP\Qで定義されている、\nユーザ名:64文字\nドメイン:255文字に従う\n計:256文字(319ではなく)",$FFFFFFFF,""
+Field="ユーザ名","user_name","varchar(50)","NOT NULL",,"","ユーザ名。少し長めに定義。",$FFFFFFFF,""
+Field="国コード","country_code","char(2)","NOT NULL",,"","国名コード。\n想定はJP, VN, USのいずれか。\n但し、登録名はJIS X 0304の2文字国名コード (ISO 3166-1のAlpha-2 code)に従う。",$FFFFFFFF,""
+Field="削除日時","delete_date_time","@DATETIME",,,"","削除日時",$FFFFFFFF,""
+Field="削除ユーザコード","delete_user_code","bigint",,,"","削除者のユーザコード",$FFFFFFFF,""
+Field="削除理由種別","delete_reason_type","char(1)",,,"","削除理由。\n1,2,3はフロントから指定可能。\n管理画面からは前述のコード値に加えて4,8,9も指定可能。\n\n0: (使用不可)タイプ値のため未定義\n1: (恒久)退社等に伴う削除\n2: (恒久)ユーザリクエストによる削除\n3: (恒久)違反に伴う削除\n4: (暫定)一時的なアカウント無効化\n5: 未使用\n6: 未使用\n7: 未使用\n8: 管理ユーザ削除\n9: テスト用割り当て\n",$FFFFFFFF,""
+Index=i_user_ix1=0,user_code 
+EffectMode=None
+Tag=user-management
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20220613230739
+Position="MAIN",1400,850
+ZOrder=1
+
+[Entity]
+PName=m_link_competition_user
+LName=競技ユーザ紐付マスタ
+Comment=ユーザ.ユーザ種別が2, 4のユーザのAOJのログイン情報を保持する
+TableOption=
+Page=MAIN
+Left=750
+Top=700
+Field="ユーザId","user_id","uuid","NOT NULL",0,"","ユーザを一意に識別するId",$FFFFFFFF,""
+Field="aojId","aoj_id","@VARCHAR(20)","NOT NULL",,"","User ID",$FFFFFFFF,""
+Field="ユーザ名","aoj_name","@VARCHAR(50)","NOT NULL",,"","User name",$FFFFFFFF,""
+Field="所属","aoj_affiliation","@VARCHAR(100)",,,"","Affiliation of the user",$FFFFFFFF,""
+Field="メールアドレス","aoj_mail","@VARCHAR(256)",,,"","E-mail address",$FFFFFFFF,""
+Field="ポリシー","aoj_policy","@VARCHAR(7)","NOT NULL",,"","The policy of submitted source codes\nprivate\npublic",$FFFFFFFF,""
+Field="ホームページurl","aoj_url","@VARCHAR(200)",,,"","The url of homepage",$FFFFFFFF,""
+Field="国コード","aoj_country","@CHAR(2)","NOT NULL",,"\qjp\q","The country living in",$FFFFFFFF,""
+EffectMode=None
+Tag=user-management
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20220612173028
+Position="MAIN",750,700
+ZOrder=3
+
+[Comment]
+Comment=ユーザ基盤
+FontName=Tahoma
+FontBold=0
+FontItalic=0
+FontUnderline=0
+FontSize=9
+FontColor=$000000
+LineColor=$000000
+BkColor=$99FFFF
+Page=Main
+Left=717
+Top=106
+ZOrder=5
+Width=315
+Height=101
+
+[Relation]
+Entity1=m_user
+Entity2=m_link_competition_user
+RelationType1=2
+RelationType2=1
+Fields1=user_id
+Fields2=user_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,5499,5321,5917,R,R,""
+Dependence=1
+Caption=
+PName=
+ModifiedDateTime=20220611165258
+LineMode=0
+Bar1=550
+Bar2=532
+Bar3=592
+TermPos1=R
+TermPos2=R
+ZOrder=6
+
+[Entity]
+PName=t_auth
+LName=認証
+Comment=認証
+TableOption=
+Page=MAIN
+Left=1250
+Top=150
+Field="ユーザId","user_id","uuid","NOT NULL",0,"","",$FFFFFFFF,""
+Field="ログインId","user_login_id","@VARCHAR(20)","NOT NULL",,"","",$FFFFFFFF,""
+Field="パスワード","user_password","@VARCHAR(512)","NOT NULL",,"","",$FFFFFFFF,""
+Field="前回ログイン日時","before_login_date_time","@DATETIME","NOT NULL",,"","",$FFFFFFFF,""
+Field="セッショントークン","session_token","@VARCHAR(512)","NOT NULL",,"","",$FFFFFFFF,""
+Field="リフレッシュセッショントークン","refresh_session_token","@VARCHAR(512)","NOT NULL",,"","",$FFFFFFFF,""
+Field="トークン作成日時","token_created_date_time","bigint","NOT NULL",,"","",$FFFFFFFF,""
+Field="トークン有効期限日時","token_expire_date_time","bigint","NOT NULL",,"","",$FFFFFFFF,""
+Index=i_auth_ix1=0,user_login_id,user_password
+EffectMode=None
+Tag=user-management
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20220612152549
+Position="MAIN",1250,150
+ZOrder=7
+
+[Relation]
+Entity1=m_user
+Entity2=t_auth
+RelationType1=2
+RelationType2=1
+Fields1=user_id
+Fields2=user_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,4427,4819,5474,R,R,""
+Dependence=1
+Caption=
+PName=
+ModifiedDateTime=20220611171527
+LineMode=0
+Bar1=443
+Bar2=482
+Bar3=547
+TermPos1=R
+TermPos2=R
+ZOrder=8
+
+[Entity]
+PName=m_team_member
+LName=チームメンバーマスタ
+Comment=チームメンバー
+TableOption=
+Page=MAIN
+Left=2400
+Top=900
+Field="チームId","team_id","uuid","NOT NULL",0,"","チームを一意に識別するID",$FFFFFFFF,""
+Field="ユーザId","user_id","uuid","NOT NULL",1,"","ユーザを一意に識別するID",$FFFFFFFF,""
+Field="メンバータイプ","member_type","char(1)","NOT NULL",,"\q2\q","リーダーなどの情報を格納する\n1: リーダー\n2: メンバー",$FFFFFFFF,""
+Field="申請ユーザコード","request_user_code","bigint","NOT NULL",,"","チーム加入依頼を実施したユーザのユーザコード",$FFFFFFFF,""
+Field="申請日時","request_date_time","@DATETIME","NOT NULL",,"","チーム加入依頼を実施した日時",$FFFFFFFF,""
+Field="承認ユーザコード","approve_user_code","bigint",,,"","チーム加入依頼を承認したユーザのユーザコード",$FFFFFFFF,""
+Field="承認日時","approve_date_time","@DATETIME",,,"","チーム加入依頼を承認した日時",$FFFFFFFF,""
+Field="非承認理由区分","not_approve_reason_type","char(1)",,,"","チーム加入依頼を非承認とした理由\n1: 誤った依頼先に依頼している\n2: 不正なユーザからの依頼\n",$FFFFFFFF,""
+Field="削除日時","delete_date_time","@DATETIME",,,"","チームメンバーを削除した日時",$FFFFFFFF,""
+Field="削除ユーザコード","delete_user_code","bigint",,,"","チームメンバーを削除したユーザのユーザコード",$FFFFFFFF,""
+Field="削除理由種別","delete_reason_type","char(1)",,,"","チームメンバーを削除した理由\n1: 誤った承認操作\n2: チームメンバー整理に伴う削除\n9: システムよる削除",$FFFFFFFF,""
+EffectMode=None
+Tag=user-management
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20220612173014
+Position="MAIN",2400,900
+ZOrder=9
+
+[Relation]
+Entity1=m_user
+Entity2=m_team_member
+RelationType1=2
+RelationType2=3
+Fields1=user_id
+Fields2=user_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,6112,7777,4433,R,R,""
+Dependence=0
+Caption=
+PName=
+ModifiedDateTime=20220612160458
+LineMode=0
+Bar1=611
+Bar2=778
+Bar3=443
+TermPos1=R
+TermPos2=R
+ZOrder=10
+
+[Entity]
+PName=m_team
+LName=チームマスタ
+Comment=チーム
+TableOption=
+Page=MAIN
+Left=2400
+Top=150
+Field="チームId","team_id","uuid","NOT NULL",0,"","チームを一意に識別するID",$FFFFFFFF,""
+Field="チームコード","team_code","bigserial","NOT NULL",,"","チームコード",$FFFFFFFF,""
+Field="チーム識別タグ","team_tag","char(3)","NOT NULL",,"","チームタグ。アルファベット３文字で登録",$FFFFFFFF,"UNIQUE"
+Field="チーム名","team_name","varchar(50)","NOT NULL",,"","チーム名。",$FFFFFFFF,""
+Field="申請日時","request_date_time","@DATETIME","NOT NULL",,"","チーム作成依頼日時",$FFFFFFFF,""
+Field="申請ユーザコード","request_user_code","bigint","NOT NULL",,"","チーム作成依頼ユーザのユーザコード",$FFFFFFFF,""
+Field="承認日時","approve_date_time","@DATETIME",,,"","チーム作成依頼を承認したユーザ",$FFFFFFFF,""
+Field="承認ユーザコード","approve_user_code","bigint",,,"","チーム作成依頼を承認したユーザのユーザコード",$FFFFFFFF,""
+Field="非承認理由種別","not_approve_reason_code","char(1)",,,"","チーム作成依頼を棄却した理由\n1: チーム名不正\n2: 必要のない申請\n3: 不正なユーザからの依頼",$FFFFFFFF,""
+Field="削除日時","delete_date_time","@DATETIME",,,"","チームを削除した日時",$FFFFFFFF,""
+Field="削除ユーザコード","delete_user_code","bigint",,,"","チームを削除したユーザのユーザコード",$FFFFFFFF,""
+Field="削除理由種別","delete_reason_type","char(1)",,,"","チームを削除した理由\n1: 申請ユーザの退社等に伴う削除\n2: 誤った承認\n3: その他\n9: システムによる削除",$FFFFFFFF,""
+Index=i_team_ix2=0,team_tag,team_name,varchar_pattern_ops
+Index=i_team_ix1=0,team_tag
+EffectMode=None
+Tag=user-management
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20220612174845
+Position="MAIN",2400,150
+ZOrder=11
+
+[Relation]
+Entity1=m_team
+Entity2=m_team_member
+RelationType1=2
+RelationType2=4
+Fields1=team_id
+Fields2=team_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,4262,6168,4291,R,R,""
+Dependence=1
+Caption=
+PName=
+ModifiedDateTime=20220612150714
+LineMode=0
+Bar1=426
+Bar2=617
+Bar3=429
+TermPos1=R
+TermPos2=R
+ZOrder=12
